@@ -1,0 +1,39 @@
+.section {
+  padding-left: var(--section-padding-x-mobile);
+  padding-right: var(--section-padding-x-mobile);
+}
+
+/* Schwelle entspricht --breakpoint-md (48rem); CSS-Media-Queries können keine
+   Custom Properties referenzieren, daher literaler Wert. */
+@media (min-width: 48rem) {
+  .section {
+    padding-left: var(--section-padding-x-desktop);
+    padding-right: var(--section-padding-x-desktop);
+  }
+}
+
+.standard {
+  padding-top: var(--section-padding-y);
+  padding-bottom: var(--section-padding-y);
+}
+
+.special {
+  padding-top: var(--section-padding-y-loose);
+  padding-bottom: var(--section-padding-y-loose);
+}
+
+.inner {
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--section-gap);
+}
+
+.standard .inner {
+  max-width: var(--section-max-width);
+}
+
+.special .inner {
+  max-width: var(--section-max-width-breakout);
+}

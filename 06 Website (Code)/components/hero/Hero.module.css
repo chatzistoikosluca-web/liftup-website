@@ -1,0 +1,52 @@
+.hero {
+  display: flex;
+  flex-direction: column;
+  gap: var(--hero-media-gap);
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--hero-gap);
+  color: var(--hero-text);
+}
+
+.eyebrow {
+  color: var(--hero-eyebrow-text);
+}
+
+.ctas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--hero-cta-gap);
+}
+
+.media {
+  display: flex;
+}
+
+@media (min-width: 48rem) {
+  .withMedia {
+    flex-direction: row;
+    align-items: center;
+  }
+  .withMedia .content,
+  .withMedia .media {
+    flex: 1;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .content {
+    animation: hero-entrance var(--hero-entrance-duration) var(--hero-entrance-ease);
+  }
+}
+
+@keyframes hero-entrance {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

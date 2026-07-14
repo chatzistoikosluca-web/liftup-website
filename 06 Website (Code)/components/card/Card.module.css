@@ -1,0 +1,32 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--card-gap);
+  background-color: var(--card-background);
+  border-width: var(--card-border-width);
+  border-style: var(--card-border-style);
+  border-color: var(--card-border);
+  border-radius: var(--card-radius);
+  padding: var(--card-padding-y) var(--card-padding-x);
+}
+
+/* Opt-in hover/focus affordance only. Real interactive semantics (<a>/<button>)
+   must be provided by whatever wraps this Card — Card itself stays a plain div. */
+.interactive {
+  transition: border-color var(--card-transition);
+}
+
+.interactive:hover {
+  border-color: var(--card-focus-ring-color);
+}
+
+.interactive:focus-within {
+  outline: var(--card-focus-ring-width) var(--card-focus-ring-style) var(--card-focus-ring-color);
+  outline-offset: var(--card-focus-ring-offset);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .interactive {
+    transition: none;
+  }
+}

@@ -1,0 +1,39 @@
+.testimonial {
+  display: flex;
+  flex-direction: column;
+  gap: var(--trust-gap);
+  margin: 0;
+}
+
+.quote {
+  color: var(--trust-quote-text);
+  margin: 0;
+}
+
+.author {
+  display: flex;
+  align-items: center;
+  gap: var(--trust-gap);
+}
+
+.avatar {
+  flex-shrink: 0;
+  width: var(--trust-avatar-size);
+  height: var(--trust-avatar-size);
+  border-radius: var(--trust-avatar-radius);
+  overflow: hidden;
+}
+
+.avatar :global(img) {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.authorName {
+  color: var(--trust-author-text);
+}
+
+.authorRole {
+  color: var(--trust-author-role-text);
+}

@@ -1,0 +1,62 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--input-gap);
+}
+
+.field {
+  display: flex;
+  align-items: center;
+  gap: var(--input-gap);
+  min-height: var(--input-size-min-height);
+  padding: var(--input-padding-y) var(--input-padding-x);
+  background-color: var(--input-background);
+  border-width: var(--input-border-width);
+  border-style: var(--input-border-style);
+  border-color: var(--input-border);
+  border-radius: var(--input-radius);
+  transition: border-color var(--input-transition);
+}
+
+.field:focus-within {
+  border-color: var(--input-border-focus);
+  outline: var(--input-focus-ring-width) var(--input-focus-ring-style) var(--input-focus-ring-color);
+  outline-offset: var(--input-focus-ring-offset);
+}
+
+.error {
+  border-color: var(--input-border-error);
+}
+
+.success {
+  border-color: var(--input-border-success);
+}
+
+.input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: var(--input-text);
+}
+
+.input:disabled {
+  color: var(--input-text-disabled);
+  cursor: not-allowed;
+}
+
+.icon {
+  display: inline-flex;
+  flex-shrink: 0;
+}
+
+.helper {
+  color: var(--input-helper-text);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .field {
+    transition: none;
+  }
+}

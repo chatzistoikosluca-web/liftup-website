@@ -1,0 +1,104 @@
+.nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--nav-gap);
+  padding: var(--nav-padding-y) var(--nav-padding-x-mobile);
+  background-color: var(--nav-background);
+  border-bottom-width: var(--nav-border-width);
+  border-bottom-style: var(--nav-border-style);
+  border-bottom-color: var(--nav-border);
+}
+
+/* Schwelle entspricht --breakpoint-md (48rem); s. Section.module.css. */
+@media (min-width: 48rem) {
+  .nav {
+    padding-left: var(--nav-padding-x-desktop);
+    padding-right: var(--nav-padding-x-desktop);
+  }
+  .toggle {
+    display: none;
+  }
+  .menu {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: var(--nav-gap);
+  }
+  .links {
+    flex-direction: row;
+  }
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+}
+
+.toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--nav-toggle-size-min-height);
+  min-width: var(--nav-toggle-size-min-height);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--nav-text);
+}
+
+.toggle:focus-visible {
+  outline: var(--nav-focus-ring-width) var(--nav-focus-ring-style) var(--nav-focus-ring-color);
+  outline-offset: var(--nav-focus-ring-offset);
+}
+
+.menu {
+  display: none;
+}
+
+.menu[data-open] {
+  display: flex;
+  flex-direction: column;
+  gap: var(--nav-gap);
+}
+
+.links {
+  display: flex;
+  flex-direction: column;
+  gap: var(--nav-gap);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.link {
+  color: var(--nav-text);
+  text-decoration: none;
+  transition: color var(--nav-transition);
+}
+
+.link:hover {
+  color: var(--nav-text-hover);
+}
+
+.link:focus-visible {
+  outline: var(--nav-focus-ring-width) var(--nav-focus-ring-style) var(--nav-focus-ring-color);
+  outline-offset: var(--nav-focus-ring-offset);
+}
+
+.link[aria-current="page"] {
+  color: var(--nav-text-hover);
+  border-bottom-width: var(--nav-border-width);
+  border-bottom-style: var(--nav-border-style);
+  border-bottom-color: currentColor;
+}
+
+.cta {
+  display: flex;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .link {
+    transition: none;
+  }
+}

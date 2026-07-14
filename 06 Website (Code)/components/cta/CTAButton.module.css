@@ -1,0 +1,103 @@
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--cta-gap);
+  min-height: var(--cta-size-min-height);
+  padding: var(--cta-padding-y) var(--cta-padding-x);
+  border-radius: var(--cta-radius);
+  border-width: var(--cta-border-width);
+  border-style: var(--cta-border-style);
+  cursor: pointer;
+  transition:
+    background-color var(--cta-transition-hover),
+    border-color var(--cta-transition-hover),
+    color var(--cta-transition-hover);
+}
+
+.button:active:not(:disabled) {
+  transition-duration: 0s;
+}
+
+.button:focus-visible {
+  outline: var(--cta-focus-ring-width) var(--cta-focus-ring-style) var(--cta-focus-ring-color);
+  outline-offset: var(--cta-focus-ring-offset);
+}
+
+.button:disabled {
+  cursor: not-allowed;
+  color: var(--cta-text-disabled);
+  border-color: var(--cta-border-disabled);
+}
+
+.primary {
+  background-color: var(--cta-background-primary);
+  border-color: var(--cta-border-primary);
+  color: var(--cta-text-primary);
+}
+.primary:hover:not(:disabled) {
+  background-color: var(--cta-background-primary-hover);
+}
+.primary:active:not(:disabled) {
+  background-color: var(--cta-background-primary-active);
+}
+
+.secondary {
+  background-color: var(--cta-background-secondary);
+  border-color: var(--cta-border-secondary);
+  color: var(--cta-text-secondary);
+}
+.secondary:hover:not(:disabled) {
+  background-color: var(--cta-background-secondary-hover);
+  border-color: var(--cta-border-secondary-hover);
+  color: var(--cta-text-secondary-hover);
+}
+
+.danger {
+  background-color: var(--cta-background-danger);
+  border-color: var(--cta-border-danger);
+  color: var(--cta-text-danger);
+}
+.danger:hover:not(:disabled) {
+  background-color: var(--cta-background-danger-hover);
+}
+
+.icon {
+  display: inline-flex;
+}
+
+.spinner {
+  width: 1em;
+  height: 1em;
+  border-radius: var(--cta-spinner-radius);
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  animation: cta-spin var(--cta-spinner-duration) var(--cta-spinner-ease) infinite;
+}
+
+.labelHidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@keyframes cta-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .button {
+    transition: none;
+  }
+  .spinner {
+    animation-duration: 1.5s;
+  }
+}
