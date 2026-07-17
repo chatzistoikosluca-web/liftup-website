@@ -1,4 +1,4 @@
-import { ButtonHTMLAttributes, ReactNode } from "react";
+import { AnchorHTMLAttributes, ButtonHTMLAttributes, ReactNode } from "react";
 import styles from "./CTAButton.module.css";
 
 export type CTAButtonVariant = "primary" | "secondary" | "danger";
@@ -11,6 +11,8 @@ export interface CTAButtonProps
   leadingIcon?: ReactNode;
   trailingIcon?: ReactNode;
   children: ReactNode;
+  /** When set, renders as an <a> (e.g. same-page anchor navigation) instead of a <button>, keeping identical styling. */
+  href?: string;
 }
 
 export function CTAButton({
@@ -22,18 +24,14 @@ export function CTAButton({
   children,
   className,
   type = "button",
+  href,
   ...rest
 }: CTAButtonProps) {
   const isDisabled = disabled || loading;
+  const classes = [styles.button, styles[variant], className].filter(Boolean).join(" ");
 
-  return (
-    <button
-      type={type}
-      className={[styles.button, styles[variant], className].filter(Boolean).join(" ")}
-      disabled={isDisabled}
-      aria-busy={loading || undefined}
-      {...rest}
-    >
+  const content = (
+    <>
       {loading ? (
         <span className={styles.spinner} aria-hidden="true" />
       ) : leadingIcon ? (
@@ -49,6 +47,30 @@ export function CTAButton({
           {trailingIcon}
         </span>
       ) : null}
+    </>
+  );
+
+  if (href && !isDisabled) {
+    return (
+      <a
+        href={href}
+        className={classes}
+        {...(rest as AnchorHTMLAttributes<HTMLAnchorElement>)}
+      >
+        {content}
+      </a>
+    );
+  }
+
+  return (
+    <button
+      type={type}
+      className={classes}
+      disabled={isDisabled}
+      aria-busy={loading || undefined}
+      {...rest}
+    >
+      {content}
     </button>
   );
 }

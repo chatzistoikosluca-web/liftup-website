@@ -10,26 +10,6 @@
   border-bottom-color: var(--nav-border);
 }
 
-/* Schwelle entspricht --breakpoint-md (48rem); s. Section.module.css. */
-@media (min-width: 48rem) {
-  .nav {
-    padding-left: var(--nav-padding-x-desktop);
-    padding-right: var(--nav-padding-x-desktop);
-  }
-  .toggle {
-    display: none;
-  }
-  .menu {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: var(--nav-gap);
-  }
-  .links {
-    flex-direction: row;
-  }
-}
-
 .brand {
   display: flex;
   align-items: center;
@@ -95,6 +75,32 @@
 
 .cta {
   display: flex;
+}
+
+/* Schwelle entspricht --breakpoint-md (48rem); s. Section.module.css.
+   Steht bewusst NACH den unconditional .toggle/.menu/.links-Regeln oben, damit
+   diese Desktop-Overrides in der Kaskade gewinnen (gleiche Spezifität, spätere
+   Regel gewinnt) — vorher stand dieser Block vor der unconditional
+   `.menu { display: none; }`-Regel, wodurch das Menü auch auf Desktop-Breiten
+   unsichtbar blieb und der Toggle-Button (ebenfalls per Media Query
+   ausgeblendet) es nicht mehr öffnen konnte. */
+@media (min-width: 48rem) {
+  .nav {
+    padding-left: var(--nav-padding-x-desktop);
+    padding-right: var(--nav-padding-x-desktop);
+  }
+  .toggle {
+    display: none;
+  }
+  .menu {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: var(--nav-gap);
+  }
+  .links {
+    flex-direction: row;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

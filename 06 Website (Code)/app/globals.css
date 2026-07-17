@@ -508,3 +508,423 @@
    15. Bewusst nicht enthalten (Design_Tokens.md §15): keine Shadow Tokens,
    keine Icon Tokens. Nicht ergänzen ohne Governance-Freigabe.
    ========================================================================== */
+
+/* ==========================================================================
+   Page-Level Base Styles (Phase 11) — kein Bestandteil von Design_Tokens.md,
+   sondern die Anwendung der oben bereits definierten Tokens auf das
+   Basis-Rendering von html/body. Vorher waren body/html ungestylt, wodurch
+   die Seite auf Browser-Standard (weißer Hintergrund, schwarzer Text) statt
+   auf der Primitive/Semantic-Farbpalette lief. Referenziert ausschließlich
+   bereits bestehende Tokens, führt keine neuen Werte ein.
+   ========================================================================== */
+
+body {
+  background-color: var(--color-background-primary);
+  color: var(--color-text-primary);
+  font-family: var(--font-family-sans);
+}
+
+::selection {
+  background-color: var(--color-selection);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+/* ==========================================================================
+   Phase 11 — Site Composition Layer (page-level only, mehrseitig)
+
+   Reine Seiten-Komposition für die Seiten unter app/ (Hero, dunkle Bühnen,
+   Story-Splits, Karten, Formular). KEIN Bestandteil des Design-Systems; verändert
+   weder die Komponenten noch deren Specs. Remappt Komponenten-Tokens nur lokal
+   über den Custom-Property-Cascade.
+
+   HINWEIS — bewusste Abweichung von der eingefrorenen Palette:
+   Die --lp-* Navy/Cyan-Tokens (Deep Navy #0A1F5C, Bright Cyan #18D7F7) sind
+   eine vom Auftraggeber ausdrücklich entschiedene Marken-/Stilrichtung für die
+   Website-Umsetzung. Sie weichen bewusst von Farbpalette.md („Gedeckte
+   Klarheit", genau ein gedeckter Akzent) ab. Die eingefrorenen Strategie-/
+   Token-Dokumente bleiben unverändert; diese Werte leben ausschließlich in
+   diesem Kompositions-Layer und müssen vor Launch über die Governance offiziell
+   in das Token-System übernommen (oder zurückgeführt) werden.
+   ========================================================================== */
+
+:root {
+  --lp-navy-900: #071238;
+  --lp-navy-800: #0a1f5c;
+  --lp-navy-700: #143079;
+  --lp-cyan: #18d7f7;
+  --lp-cyan-hover: #35ddf9;
+  --lp-cyan-active: #0fbfe0;
+  --lp-on-navy-muted: rgba(250, 247, 242, 0.74);
+  --lp-hairline: rgba(250, 247, 242, 0.14);
+}
+
+/* ---------- Gemeinsames Token-Remap für dunkle Navy-Flächen ---------- */
+.lp-onnavy {
+  background-color: var(--lp-navy-900);
+  color: var(--color-text-on-deep);
+
+  --hero-text: var(--color-text-on-deep);
+  --hero-eyebrow-text: var(--lp-cyan);
+  --content-heading-text: var(--color-text-on-deep);
+  --content-text: var(--lp-on-navy-muted);
+
+  --cta-background-primary: var(--lp-cyan);
+  --cta-background-primary-hover: var(--lp-cyan-hover);
+  --cta-background-primary-active: var(--lp-cyan-active);
+  --cta-text-primary: var(--lp-navy-900);
+  --cta-border-primary: var(--lp-cyan);
+  --cta-background-secondary: transparent;
+  --cta-background-secondary-hover: rgba(250, 247, 242, 0.1);
+  --cta-text-secondary: var(--color-text-on-deep);
+  --cta-text-secondary-hover: var(--color-text-on-deep);
+  --cta-border-secondary: rgba(250, 247, 242, 0.38);
+  --cta-border-secondary-hover: var(--lp-cyan);
+}
+
+/* ---------- Navigation als Navy-Bar (durchgängig auf allen Seiten) ---------- */
+.lp-nav {
+  --nav-background: var(--lp-navy-900);
+  --nav-border: transparent;
+  --nav-text: var(--color-text-on-deep);
+  --nav-text-hover: var(--lp-cyan);
+
+  --cta-background-primary: var(--lp-cyan);
+  --cta-background-primary-hover: var(--lp-cyan-hover);
+  --cta-background-primary-active: var(--lp-cyan-active);
+  --cta-text-primary: var(--lp-navy-900);
+  --cta-border-primary: var(--lp-cyan);
+}
+
+/* ---------- Navy-Bühnen: Home-Hero, Subpage-Hero, Abschluss-CTA ---------- */
+.lp-stage {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background:
+    radial-gradient(
+      120% 110% at 15% 0%,
+      var(--lp-navy-700) 0%,
+      var(--lp-navy-800) 48%,
+      var(--lp-navy-900) 100%
+    );
+}
+
+.lp-hero-copy .hero-display {
+  font-size: clamp(2.25rem, 1.4rem + 3.4vw, 3.5rem);
+  line-height: 1.06;
+}
+
+.lp-hero-copy .body-lead {
+  max-width: 36rem;
+  color: var(--lp-on-navy-muted);
+}
+
+.lp-hero-frame {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: var(--container-standard);
+  margin-inline: auto;
+}
+
+/* ---------- Weicher Übergang Hero → erste helle Sektion ----------
+   Löst den harten Farbsprung Navy → Creme: Die Hero-Bühne (reine Navy-
+   Verlaufsfläche über .lp-stage, keine Animation) blendet in den letzten Rem
+   vor ihrem unteren Rand (reine Padding-Zone, keine Textüberdeckung) bereits
+   zur Content-Hintergrundfarbe über; die erste helle Sektion nimmt oben eine
+   kaum wahrnehmbare Navy-Tönung auf, die zur selben Höhe hin ausläuft. Beide
+   Verläufe treffen sich an der Sektionsgrenze und erzeugen so einen
+   fließenden statt geschnittenen Übergang — ganz ohne Overflow/Pseudo-
+   Element-Stacking-Tricks, da beide nur die eigene Box-Background-Ebene
+   nutzen (liegt immer hinter Inhalt). */
+.lp-hero-fade {
+  position: absolute;
+  inset: auto 0 0 0;
+  z-index: 0;
+  height: clamp(3rem, 9vw, 5rem);
+  pointer-events: none;
+  background: linear-gradient(to bottom, transparent, var(--color-background-primary));
+}
+
+.lp-bridge-receive {
+  background-image: linear-gradient(to bottom, rgba(10, 31, 92, 0.06), transparent 70%);
+}
+
+/* ---------- Weicher Übergang letzte helle Sektion → Abschluss-CTA ----------
+   Spiegelbildlich zum Hero-Übergang: statt eines harten Sprungs von Creme/
+   Warmton direkt auf Navy dunkelt die letzte helle Sektion vor der Navy-
+   Bühne sanft nach — wieder nur über die eigene Box-Background-Ebene, ohne
+   den Text darüber zu beeinträchtigen (Verlauf bleibt subtil genug, um auf
+   dem hellen Untergrund lesbar zu bleiben). */
+.lp-bridge-to-navy {
+  background-image: linear-gradient(to bottom, transparent, rgba(10, 31, 92, 0.12) 100%);
+}
+
+/* ---------- Helle Inhaltssektionen: Rhythmus & Akzente ---------- */
+.lp-section-head {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  max-width: var(--measure-default);
+}
+
+.lp-price-value {
+  color: var(--lp-navy-800);
+}
+
+/* ---------- Story-Sektionen: Split + Callout ---------- */
+.lp-story {
+  display: grid;
+  gap: var(--space-8);
+  align-items: start;
+}
+
+@media (min-width: 64rem) {
+  .lp-story {
+    grid-template-columns: minmax(0, 19rem) minmax(0, 1fr);
+    gap: var(--space-16);
+  }
+  .lp-story-head {
+    position: sticky;
+    top: var(--space-8);
+  }
+}
+
+.lp-story-head {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.lp-story-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  max-width: var(--measure-default);
+}
+
+.lp-callout {
+  margin-top: var(--space-2);
+  padding: var(--space-5) var(--space-6);
+  border-left: 3px solid var(--lp-navy-800);
+  border-radius: var(--radius-default);
+  background-color: var(--color-surface-default);
+  color: var(--color-text-primary);
+}
+
+/* ---------- Premium-Panel (rahmt Prozess/Preise) ---------- */
+.lp-panel {
+  padding: var(--space-6);
+  border: 1px solid var(--color-border-default);
+  border-radius: var(--radius-default);
+  background-color: var(--color-surface-default);
+}
+
+@media (min-width: 48rem) {
+  .lp-panel {
+    padding: var(--space-8);
+  }
+}
+
+/* ---------- Kontakt-Methoden-Kacheln (auf Navy) ---------- */
+.lp-contact-method {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  flex: 1;
+  padding: var(--space-4) var(--space-5);
+  border: 1px solid var(--color-border-divider);
+  border-radius: var(--radius-default);
+  background-color: var(--color-surface-default);
+}
+
+/* ---------- Ablauf-Kapitel (kinematografische Prozess-Reise) ----------
+   Ersetzt die frühere kompakte Timeline-Liste (Ring+Linie) — wirkte trotz
+   Icons noch wie "eine Liste". Jeder Schritt bekommt jetzt eine eigene,
+   großzügige Sektion (abwechselnder Hintergrund, viel Weißraum, große
+   Typografie) statt eines schmalen Listeneintrags — der Bildlauf selbst wird
+   zum Verbindungselement zwischen den Schritten, keine gezeichnete Linie
+   nötig. */
+.lp-chapter {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-5);
+  max-width: var(--measure-default);
+}
+
+.lp-icon-tile.lp-chapter-icon {
+  width: 4.5rem;
+  height: 4.5rem;
+}
+
+.lp-icon-tile.lp-chapter-icon svg {
+  width: 2.25rem;
+  height: 2.25rem;
+}
+
+/* ---------- Footer als Navy-Fläche ----------
+   border-top schafft eine bewusste Naht zur vorangehenden Navy-CTA-Sektion,
+   statt dass beide gleichfarbigen Flächen kommentarlos ineinander laufen
+   ("wirkt unfertig"). Der zweite border-top (auf dem Footer-eigenen unteren
+   Block: Copyright/Legal-Zeile, immer das zweite direkte Kind des <footer>-
+   Elements laut Footer.tsx) trennt diese Zeile spürbar von Marke/Navigation
+   darüber — beides reine Rhythmus-Verbesserung, kein neuer Inhalt. */
+.lp-footer {
+  --footer-background: var(--lp-navy-900);
+  --footer-link-text: var(--color-text-on-deep);
+  border-top: 1px solid var(--lp-hairline);
+}
+
+.lp-footer > div:last-child {
+  padding-top: var(--space-6);
+  border-top: 1px solid var(--lp-hairline);
+}
+
+/* ---------- Kontaktformular (UI-Prototyp, ohne Backend) ---------- */
+.lp-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.lp-form-grid {
+  display: grid;
+  gap: var(--space-4);
+}
+
+@media (min-width: 40rem) {
+  .lp-form-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.lp-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--input-gap);
+}
+
+.lp-control {
+  width: 100%;
+  min-height: var(--input-size-min-height);
+  padding: var(--input-padding-y) var(--input-padding-x);
+  background-color: var(--input-background);
+  border-width: var(--input-border-width);
+  border-style: var(--input-border-style);
+  border-color: var(--input-border);
+  border-radius: var(--input-radius);
+  color: var(--input-text);
+  transition: border-color var(--input-transition);
+}
+
+.lp-control:focus-visible {
+  border-color: var(--input-border-focus);
+  outline: var(--input-focus-ring-width) var(--input-focus-ring-style)
+    var(--input-focus-ring-color);
+  outline-offset: var(--input-focus-ring-offset);
+}
+
+textarea.lp-control {
+  min-height: 8rem;
+  resize: vertical;
+}
+
+.lp-form-note {
+  padding: var(--space-4) var(--space-5);
+  border: 1px solid var(--color-border-default);
+  border-left: 3px solid var(--lp-navy-800);
+  border-radius: var(--radius-default);
+  background-color: var(--color-surface-elevated);
+  color: var(--color-text-secondary);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lp-control {
+    transition: none;
+  }
+}
+
+/* ---------- Scroll-Reveal (siehe _shared/Reveal.tsx) ----------
+   .lp-reveal allein = versteckter Startzustand (nur clientseitig nach Mount
+   gesetzt, siehe Reveal.tsx). Ohne diese Klasse (SSR/No-JS/idle) ist der
+   Inhalt immer normal sichtbar — kein Accessibility-Risiko. */
+.lp-reveal {
+  opacity: 0;
+  transform: translateY(18px);
+}
+
+.lp-reveal--visible {
+  opacity: 1;
+  transform: translateY(0);
+  transition:
+    opacity 0.7s var(--ease-out),
+    transform 0.7s var(--ease-out);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lp-reveal,
+  .lp-reveal--visible {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* ---------- Icon-Kacheln (Leistungen-Entdeckung, Ablauf-Zeitleiste) ----------
+   Ein konsistentes, kreisförmiges Icon-Gehäuse — überall gleiche Größe/
+   Rundung/Randbehandlung, nur die Akzentfarbe wechselt je nach Hintergrund
+   (Cyan auf Navy, gedecktes Navy auf hellem Grund) über `color` (Icons nutzen
+   currentColor). */
+.lp-icon-tile {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 3.25rem;
+  height: 3.25rem;
+  border-radius: var(--radius-full);
+  border: 1px solid currentColor;
+  opacity: 1;
+}
+
+.lp-icon-tile svg {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.lp-icon-tile--onnavy {
+  color: var(--lp-cyan);
+  border-color: rgba(24, 215, 247, 0.35);
+  background-color: rgba(24, 215, 247, 0.08);
+}
+
+.lp-icon-tile--onlight {
+  color: var(--lp-navy-800);
+  border-color: var(--color-border-default);
+  background-color: var(--color-surface-elevated);
+}
+
+/* ---------- Leistungen-Entdeckung (Startseite: Icon statt Textblock) ---------- */
+.lp-service-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-4);
+  padding: var(--space-6);
+  border: 1px solid var(--color-border-default);
+  border-radius: var(--radius-default);
+  background-color: var(--color-surface-default);
+  transition: border-color var(--motion-hover);
+}
+
+.lp-service-tile:hover,
+.lp-service-tile:focus-within {
+  border-color: var(--lp-navy-800);
+}
+
